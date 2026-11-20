@@ -1,23 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
-<link rel="stylesheet" href="./style.css">
+<title>Vice Panels — Cover Art Studio</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">VP</span><div><h1>Vice Panels</h1><p>GTA-style Cover Art Studio</p></div></div>
+  <div class="top-actions"><span id="statusLine" class="status">Loading samples…</span><button id="exportButton" class="export-btn" type="button">Export PNG ↓</button></div>
+</header>
+<main class="workspace">
+  <aside class="panel controls">
+    <section><h2>Photos</h2>
+      <label class="upload-box">Add photos (max 3)<input id="photoUpload" type="file" accept="image/*" multiple></label>
+      <p class="hint">Or drag images onto the cover. Click a panel, then assign:</p>
+      <div id="photoSlots" class="slot-row"></div>
+      <p id="selectedLabel" class="selected-label">Panel 1 selected</p>
+      <label class="field">Zoom selected panel<input id="zoomSlider" type="range" min="1" max="2.6" step="0.02" value="1"></label>
+      <p class="hint">Drag directly on the cover to pan the selected panel.</p>
+    </section>
+    <section><h2>Composition</h2>
+      <label class="field">Panel layout<select id="layoutSelect"></select></label>
+      <label class="field">Colour grade<select id="gradeSelect"></select></label>
+      <label class="field">Export size<select id="sizeSelect"></select></label>
+      <label class="field">Title position<select id="titlePosSelect"><option value="top">Top</option><option value="bottom">Bottom</option></select></label>
+    </section>
+    <section><h2>Lettering</h2>
+      <label class="field">Title line 1<input id="titleLine1" type="text" maxlength="14"></label>
+      <label class="field">Title line 2<input id="titleLine2" type="text" maxlength="14"></label>
+      <label class="field">Subtitle<input id="subtitleInput" type="text" maxlength="32"></label>
+      <label class="field">Sticker badge<input id="badgeInput" type="text" maxlength="16"></label>
+    </section>
+    <section><h2>Finish</h2>
+      <label class="check"><input id="halftoneToggle" type="checkbox"> Halftone dots</label>
+      <label class="check"><input id="vignetteToggle" type="checkbox"> Vignette</label>
+      <label class="check"><input id="starsToggle" type="checkbox"> Five-star row</label>
+    </section>
+    <p class="foot">100% offline · Original artwork only · Your photos never leave this page.</p>
+  </aside>
+  <section class="stage">
+    <div class="stage-frame"><canvas id="previewCanvas" width="720" height="720"></canvas></div>
+    <p class="stage-hint">Live preview — every change re-renders instantly. Export renders a clean cover with no selection outline.</p>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
 </main>
-<script type="module" src="./src/main.js"></script>
+<script type="module" src="src/app.js"></script>
 </body>
 </html>
