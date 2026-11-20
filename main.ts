@@ -1,7 +1,7 @@
 // main.ts — Vice Panels entry builder (Node 22, standard library only).
 // Copies app/ and screenshots/ into the output directory and writes a
 // deterministic dossier.json using the vendored buildDossier helper.
-import { cpSync, mkdirSync, rmSync, writeFileSync, readdirSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildDossier } from "./vendor/makefun-app.ts";
@@ -21,8 +21,15 @@ export function sortedEntries(dir: string): string[] {
 }
 
 export function buildEntry(): string {
-  rmSync(outputDir, { recursive: true, force: true });
-  mkdirSync(outputDir, { recursive: true });
+  // Clear the output directory's contents, never the directory itself:
+  // in the grader it is a mount that cannot be removed.
+  if (existsSync(outputDir)) {
+    for (const entry of readdirSync(outputDir)) {
+      rmSync(join(outputDir, entry), { recursive: true, force: true });
+    }
+  } else {
+    mkdirSync(outputDir, { recursive: true });
+  }
   cpSync(join(repoRoot, "app"), join(outputDir, "app"), { recursive: true });
   cpSync(join(repoRoot, "screenshots"), join(outputDir, "screenshots"), { recursive: true });
   return outputDir;
